@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  go:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myapp017
+    image: myapp017
+    ports:
+      - "8888:7777"
+    depends_on:
+      - mongodb
+    networks:
+      - mynetwork
+    command: >
+      sh -c "go test -v ./... && exec ./main"  # Run tests and then start the server
+  
+  mongodb:
+    container_name: mongo_container1
+    image: mongo:latest
+    ports:
+      - "27018:27017"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
